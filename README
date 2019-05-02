@@ -1,4 +1,4 @@
-lsmonitor script for LS-WVL with Debian Stretch
+lsmonitor script for LS-WVL with Debian stretch (linux-image-4.9.0-9-marvell)
 
 Based on:
  blstools  - Copyright (C) 2010 Michele Manzato
@@ -11,7 +11,7 @@ Credits:
 
 lsmonitor:
 - handle ls complete power-on
-- monitor hdd temperature & control fan speed
+- monitor hdd & soc temperatures & control fan speed
 - monitor hdd status & control function led
 - monitor power switch
 - monitor function button
