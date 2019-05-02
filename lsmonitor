@@ -6,7 +6,7 @@
 # Required-Stop:     $syslog
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
-# Short-Description: Monitor Linkstation LS-CHLv2 and LS-XHL
+# Short-Description: Monitor Linkstation LS-WVL
 # Description:       Enable service provided by daemon.
 ### END INIT INFO
 
@@ -27,14 +27,16 @@ PIDFILE=/var/run/lsmonitor_daemon.pid
 LOGFILE=/var/log/lsmonitor.log
 
 # Control interfaces
-LED_DIR="/sys/devices/gpio_leds/leds"
-LINFO="lsxl:amber:info"
-LPOWER="lsxl:blue:power"
-LBFUNC="lsxl:blue:func"
-LAFUNC="lsxl:red:func"
-LALARM="lsxl:red:alarm"
+LED_DIR="/sys/devices/platform/gpio_leds/leds"
+LINFO="linkstation:amber:info"
+LPOWER="linkstation:blue:power"
+LBFUNC="linkstation:blue:function"
+LAFUNC="linkstation:red:function"
+LALARM="linkstation:red:alarm"
 
-FAN_CTRL=/sys/bus/platform/drivers/gpio-fan/gpio_fan/hwmon/hwmon0
+THERMAL=/sys/devices/virtual/thermal/thermal_zone0
+
+FAN_CTRL=$(dirname $(ls /sys/class/hwmon/hwmon?/fan1_input))
 FAN_TARGET=${FAN_CTRL}/fan1_target
 FAN_INPUT=${FAN_CTRL}/fan1_input
 
@@ -50,6 +52,11 @@ SPEED_FULL=5000
 HDDTEMP0=45
 HDDTEMP1=50
 HDDTEMP2=55
+
+# SoC temperature limits for fancontrol
+SOCTEMP0=55
+SOCTEMP1=60
+SOCTEMP2=65
 
 USER_FUNCTION="/path/to/your/script/emergency.sh"
 USER_FUNCTION_ARGS="your_args_here"
@@ -139,13 +146,14 @@ monitor_temperature()
 {
     # Retrieve HDD temp
     HDDTEMP=$(smartctl /dev/sda --all | awk '$1 == "194" {print $10}')
+    SOCTEMP=$(($(cat $THERMAL/temp)/1000))
 
     # Change fan speed accordingly
-    if [ $HDDTEMP -le $HDDTEMP0 ]; then
+    if [ $HDDTEMP -le $HDDTEMP0 -a $SOCTEMP -le $SOCTEMP0 ]; then
         fan_speed set $SPEED_STOP
-    elif [ $HDDTEMP -le $HDDTEMP1 ]; then
+    elif [ $HDDTEMP -le $HDDTEMP1 -a $SOCTEMP -le $SOCTEMP1 ]; then
         fan_speed set $SPEED_SLOW
-    elif [ $HDDTEMP -le $HDDTEMP2 ]; then
+    elif [ $HDDTEMP -le $HDDTEMP2 -a $SOCTEMP -le $SOCTEMP2 ]; then
         fan_speed set $SPEED_HIGH
     else
         fan_speed set $SPEED_FULL
@@ -238,7 +246,7 @@ lsmonitor_daemon()
     led_set $LPOWER blink-fast
 
     # Initiate unit shutdown
-    halt
+    poweroff
 }
 
 # Kill the lsmonitor daemon
