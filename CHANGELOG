@@ -1,3 +1,4 @@
+- 2019.5.2 Modified to work with LS-WVL running Debian stretch (linux-image-4.9.0-9-marvell).
 - Modified to work with a Debian kernel on a LS-CHLv2
 - Added hdd status monitoring
 - Modified to work with a vanilla kernel >= 3.6
