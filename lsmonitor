@@ -141,7 +141,7 @@ get_function_button_state() {
 }
 
 
-# Monitor HDD temperature & control fan speed
+# Monitor HDD & SoC temperatures & control fan speed
 monitor_temperature()
 {
     # Retrieve HDD temp
