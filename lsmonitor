@@ -44,14 +44,14 @@ INPUT=/dev/input/event0
 
 # Fan speeds
 SPEED_STOP=0
-SPEED_SLOW=1500
+SPEED_SLOW=1750
 SPEED_HIGH=3250
 SPEED_FULL=5000
 
 # HDD temperature limits for fancontrol
-HDDTEMP0=45
-HDDTEMP1=50
-HDDTEMP2=55
+HDDTEMP0=40
+HDDTEMP1=45
+HDDTEMP2=50
 
 # SoC temperature limits for fancontrol
 SOCTEMP0=55
@@ -71,9 +71,9 @@ do_log() {
 # Set and get current fan speed
 fan_speed() {
     if [ $1 = "get" ]; then
-        cat $FAN_INPUT
+        expr 5000 - $(cat $FAN_INPUT)
     elif [ $1 = "set" ]; then
-        echo $2 > $FAN_TARGET
+        echo $((5000 - $2)) > $FAN_TARGET
     fi
 }
 
@@ -145,8 +145,10 @@ get_function_button_state() {
 monitor_temperature()
 {
     # Retrieve HDD temp
-    HDDTEMP=$(smartctl /dev/sda --all | awk '$1 == "194" {print $10}')
-    SOCTEMP=$(($(cat $THERMAL/temp)/1000))
+    set $(hddtemp -n /dev/sda /dev/sdb)
+    [ "$1" -ge "$2" ] && HDDTEMP=$1 || HDDTEMP=$2
+
+    SOCTEMP=$(( ($(cat $THERMAL/temp) + 500) / 1000 ))
 
     # Change fan speed accordingly
     if [ $HDDTEMP -le $HDDTEMP0 -a $SOCTEMP -le $SOCTEMP0 ]; then
