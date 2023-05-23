@@ -1,6 +1,7 @@
+# Install
+
 - copy or clone lsmonitor to /etc/init.d/
 - make the file executeable (chmod 755 /etc/init.d/lsmonitor)
 - if you want to run on startup as service type: update-rc.d lsmonitor defaults
-- install evtest and smartmontools type: apt-get install evtest smartmontools
-
+- install required tools: apt-get install evtest hdparm hddtemp smartmontools
 - get up to date file from github: # git clone https://github.com/wenzhuoz/lsmonitor.git

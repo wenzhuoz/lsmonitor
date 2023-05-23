@@ -1,4 +1,4 @@
-lsmonitor script for LS-WVL with Debian stretch (linux-image-4.9.0-9-marvell)
+lsmonitor script for LS-WVL with Debian bullseye (linux-image-5.10.0-23-marvell)
 
 Based on:
  blstools  - Copyright (C) 2010 Michele Manzato
