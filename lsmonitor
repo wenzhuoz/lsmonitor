@@ -242,7 +242,7 @@ lsmonitor_daemon()
     done
 
     # Run the fan at low speed while halting, just in case halt hangs the unit
-    fan_speed set $SPEED_LOW
+    fan_speed set $SPEED_SLOW
 
     # blink power led
     led_set $LPOWER blink-fast
