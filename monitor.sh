@@ -3,7 +3,7 @@
 FAN_INPUT=$(ls /sys/class/hwmon/hwmon?/fan1_input)
 
 fanspeed() {
-    expr 5000 - $(cat $FAN_INPUT)
+    echo $(( 5000 - $(cat $FAN_INPUT) ))
 }
 
 TEMP=/sys/devices/virtual/thermal/thermal_zone0/temp
