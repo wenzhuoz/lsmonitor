@@ -71,9 +71,9 @@ do_log() {
 # Set and get current fan speed
 fan_speed() {
     if [ $1 = "get" ]; then
-        expr 5000 - $(cat $FAN_INPUT)
+	echo $(( 5000 - $(cat $FAN_INPUT) ))
     elif [ $1 = "set" ]; then
-        echo $((5000 - $2)) > $FAN_TARGET
+        echo $(( 5000 - $2 )) > $FAN_TARGET
     fi
 }
 
