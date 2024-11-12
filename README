@@ -1,4 +1,7 @@
-lsmonitor script for LS-WVL with Debian bullseye (linux-image-5.10.0-23-marvell)
+lsmonitor script for LS-WVL with Debian:
+
+* bullseye (linux-image-5.10.0-23-marvell)
+* bookworm (linux-image-6.1.0-26-marvell)
 
 Based on:
  blstools  - Copyright (C) 2010 Michele Manzato
